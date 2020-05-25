@@ -6,12 +6,21 @@ yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
 # HTML
 
 ```
-<header js-menu-sticky>
+<header js-menu-sticky js-menu-sticky-mobile> 
 
     <ul js-menu>
+
         <li js-menu-item>
             <a href="#" js-menu-link>Exemple</a>    
         </li>
+
+        <li js-menu-item js-menu-haschildren>
+            <a href="#" js-menu-link>Exemple with submenu</a>
+            <div js-menu-submenu>
+                ...
+            </div>
+        </li>
+
     </ul>    
 
 </header>
