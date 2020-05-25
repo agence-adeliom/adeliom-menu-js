@@ -22,6 +22,10 @@ yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
             </div>
         </li>
 
+        <li js-menu-item js-menu-event="mouseenter">
+            <a href="#" js-menu-link>Open on hover</a>    
+        </li>
+
     </ul>    
 
 </header>
