@@ -17,6 +17,7 @@ yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
         <li js-menu-item js-menu-haschildren>
             <a href="#" js-menu-link>Exemple with submenu</a>
             <div js-menu-submenu>
+                <div js-menu-back>Back</div>
                 ...
             </div>
         </li>
