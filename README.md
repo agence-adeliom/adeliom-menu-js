@@ -29,7 +29,6 @@ yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
 # Import
 ```
 import Menu from 'adeliom-menu-js';
-import '~adeliom-livesearch-js/dist/livesearch.css';
 ```
 
 # Available options (by default)
