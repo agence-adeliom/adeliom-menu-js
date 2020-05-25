@@ -576,7 +576,7 @@ export default class Menu extends Emitter {
                 if(!this.options.stickyScrollTop){
                     this.sticky.classList.add('sticky');
                     this.body.style.paddingTop = this.sticky.clientHeight + "px";
-                    this.emit('sticky-in', {
+                    this.emit('sticky_in', {
                         sticky: this.sticky,
                         scrollTop: st,
                         lastScrollTop: lastScrollTop
@@ -592,7 +592,7 @@ export default class Menu extends Emitter {
                            setTimeout(() => {
                                this.sticky.classList.add('scroll');
                            }, 50);
-                           this.emit('sticky-out',{
+                           this.emit('sticky_out',{
                                sticky: this.sticky,
                                scrollTop: st,
                                lastScrollTop: lastScrollTop
@@ -603,7 +603,7 @@ export default class Menu extends Emitter {
                         if(!this.sticky.classList.contains('scroll--up')){
                             this.sticky.classList.add('scroll--up');
                             this.sticky.classList.remove('scroll--down');
-                            this.emit('sticky-in', {
+                            this.emit('sticky_in', {
                                 sticky: this.sticky,
                                 scrollTop: st,
                                 lastScrollTop: lastScrollTop
@@ -623,7 +623,7 @@ export default class Menu extends Emitter {
                 else{
                     this.sticky.classList.remove('sticky');
                 }
-                this.emit('sticky-out',{
+                this.emit('sticky_out',{
                     sticky: this.sticky,
                     scrollTop: st,
                     lastScrollTop: lastScrollTop

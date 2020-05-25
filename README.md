@@ -1,35 +1,25 @@
 # Install
 ```
-yarn add https://bitbucket.org/adeliomgit/adeliom-livesearch-js.git
+yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
 ```
 
 # HTML
 
 ```
-<form js-livesearch-form>
-    ...
-</form>
+<header js-menu-sticky>
 
-<div js-livesearch-loading>
-    ....
-</div>
+    <ul js-menu>
+        <li js-menu-item>
+            <a href="#" js-menu-link>Exemple</a>    
+        </li>
+    </ul>    
 
-<div js-livesearch-results>
-    ...
-</div>
-
-<div js-livesearch-noresult>
-    ...
-</div>
-
-<div js-livesearch-pagination>
-    ...
-</div>
+</header>
 ```
 
 # Import
 ```
-import Livesearch from 'adeliom-livesearch-js';
+import Menu from 'adeliom-menu-js';
 import '~adeliom-livesearch-js/dist/livesearch.css';
 ```
 
@@ -37,55 +27,100 @@ import '~adeliom-livesearch-js/dist/livesearch.css';
 
 ```
 const settings = {
-    "pathAjax": "",
-    "actionAjax": "",
-    "filtersSelector": "[js-livesearch-form]",
-    "resultsSelector": "[js-livesearch-results]",
-    "loadingSelector": "[js-livesearch-loading]",
-    "paginationSelector": "[js-livesearch-pagination]",
-    "resetSelector": "[js-livesearch-reset]",
-    "noResultSelector": "[js-livesearch-noresult]",
-    "pageNumberSelector": "[js-livesearch-page]",
-    "submitSelector": "",
-    "perPage": 9,
-    "minimumTimeLoading": 1000,
-    "paramsInUrl": true,
-    "animationScrollTo": "smooth",
-}
+    'menuSelector': '[js-menu]',
+    'linkSelector': '[js-menu-link]',
+    'noLinkSelector': '[js-menu-nolink]',
+    'parentSelector': '[js-menu-item]',
+    'parentSubmenuSelector': '[js-menu-haschildren]',
+    'submenuSelector': '[js-menu-sublevel]',
+    'eventSelector': '[js-menu-event]', -- event type : click by default, or mouseenter
+    'closeSelector': '[js-menu-close]',
+    'overlaySelector': '[js-menu-overlay]',
+    'backSelector': '[js-menu-back]',
+    'searchSelector': '[js-search]',
+    'searchOpenSelector': '[js-search-open]',
+    'searchCloseSelector': '[js-search-close]',
+    'menuBurgerSelector': '[js-menu-burger]',
+    'menuBurgerLabelSelector': '[js-menu-burger-label]',
+    'menuMobileSelector': '[js-menu-mobile]',
+    'stickyMobileSelector': '[js-menu-sticky-mobile]',
+    'stickySelector': '[js-menu-sticky]',
+    'equalizeHeightSelector': '[js-menu-equalizeheight]',
+    'skipLinksSelector': '[js-menu-skip-links]',
+    'stickyScrollTop': false,
+    'stickyOffset': 300,
+    'closeMenuOnScroll': false,
+    'selectByDataAttribute': false,
+    'responsiveBreakpoint': 1280,
+    'accessibility': true,
+    'openingTime': 250
+};
 ```
 
 # Init Class
 
 ```
-const livesearch = new Livesearch(settings);
-livesearch.init();
+const menu = new Menu(settings);
+menu.init();
 ```
 
 # Listener
 ```
-// before ajax call
-livesearch.on('beforeChange', (response) => {
+menu.on('before_menu_open', (response) => {
     console.log(response);
 });
 
-// after render html
-livesearch.on('afterChange', (response) => {
+menu.on('after_menu_open', (response) => {
     console.log(response);
 });
 
-// when page is changed
-livesearch.on('pageChange', (response) => {
+menu.on('before_menu_open_mobile', (response) => {
     console.log(response);
 });
-```
 
-# Methods
-```
-livesearch.reset();
+menu.on('after_menu_open_mobile', (response) => {
+    console.log(response);
+});
 
-// you can pass only the event
-livesearch.update(event);
+menu.on('before_submenu_open', (response) => {
+    console.log(response);
+});
 
-// or specify a name and a value
-livesearch.update(null, inputName, inputValue);
+menu.on('after_submenu_open', (response) => {
+    console.log(response);
+});
+
+menu.on('before_previous_submenu', (response) => {
+    console.log(response);
+});
+
+menu.on('after_previous_submenu', (response) => {
+    console.log(response);
+});
+
+// only available if sticky is init
+menu.on('scroll', (response) => {
+    console.log(response);
+});
+
+menu.on('sticky_in', (response) => {
+    console.log(response);
+});
+
+menu.on('sticky_out', (response) => {
+    console.log(response);
+});
+
+menu.on('search_open', (response) => {
+    console.log(response);
+});
+
+menu.on('search_close', (response) => {
+    console.log(response);
+});
+
+menu.on('search_submit', (response) => {
+    console.log(response);
+});
+
 ```
