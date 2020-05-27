@@ -119,7 +119,7 @@ export default class Menu extends Emitter {
         // close menu if we scroll on the page
         if(this.options.closeMenuOnScroll){
             document.addEventListener('scroll', () => {
-                if(this.body.classList.contains('menu-is-open') && !this._isMobileDevice()){
+                if(this.body.classList.contains('menu-is-open') && !this._isMobile() && !this._isTouchable()){
                     this._closeMenu();
                 }
             });
@@ -150,9 +150,20 @@ export default class Menu extends Emitter {
 
         // handle sticky with responsive callback
         this._handleResponsive(() => {
+
             this._closeMenu();
             this._initSticky();
             this._initMenu();
+
+            if(this.options.accessibility && !this._isMobile()){
+                // close submenu if it's last link
+                document.addEventListener('focusin', (e) => {
+                    if(this.currentSubmenu && !e.target.hasAttribute(this._getAttribute(this.options.linkSelector)) && !getClosest(e.target, this.options.submenuSelector)){
+                        this._closeMenu();
+                    }
+                });
+            }
+
         });
 
         // handle search
@@ -160,12 +171,14 @@ export default class Menu extends Emitter {
             this._handleSearch();
         }
 
-        // close submenu if it's last link
-        document.addEventListener('focusin', (e) => {
-            if(this.currentSubmenu && !e.target.hasAttribute(this.options.linkSelector.replace('[', '').replace(']', '')) && !getClosest(e.target, this.options.submenuSelector)){
-                this._closeMenu();
-            }
-        });
+        if(this._isTouchable() && !this._isMobile()){
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                if(this.currentSubmenu && target !== this.currentSubmenu && !getClosest(target, this.options.submenuSelector)){
+                    this._closeMenu();
+                }
+            });
+        }
 
         this.isInit = true;
 
@@ -182,7 +195,7 @@ export default class Menu extends Emitter {
             if(skipLinks){
                 skipLinks.forEach((link) => {
                     link.addEventListener('focus', () => {
-                       this.skipLinks.classList.add('is-visible');
+                        this.skipLinks.classList.add('is-visible');
                     });
                     link.addEventListener('focusout', (e) => {
                         const parent = getClosest(e.relatedTarget, this.options.skipLinksSelector);
@@ -576,7 +589,7 @@ export default class Menu extends Emitter {
                 if(!this.options.stickyScrollTop){
                     this.sticky.classList.add('sticky');
                     this.body.style.paddingTop = this.sticky.clientHeight + "px";
-                    this.emit('sticky_in', {
+                    this.emit('sticky-in', {
                         sticky: this.sticky,
                         scrollTop: st,
                         lastScrollTop: lastScrollTop
@@ -585,25 +598,25 @@ export default class Menu extends Emitter {
                 else{
                     this.sticky.classList.add('sticky-up');
                     if (st > lastScrollTop) {
-                       if(!this.sticky.classList.contains('scroll--down')){
-                           this.sticky.classList.add('scroll--down');
-                           this.sticky.classList.remove('scroll--up');
-                           this.body.style.paddingTop = this.sticky.clientHeight + "px";
-                           setTimeout(() => {
-                               this.sticky.classList.add('scroll');
-                           }, 50);
-                           this.emit('sticky_out',{
-                               sticky: this.sticky,
-                               scrollTop: st,
-                               lastScrollTop: lastScrollTop
-                           });
-                       }
+                        if(!this.sticky.classList.contains('scroll--down')){
+                            this.sticky.classList.add('scroll--down');
+                            this.sticky.classList.remove('scroll--up');
+                            this.body.style.paddingTop = this.sticky.clientHeight + "px";
+                            setTimeout(() => {
+                                this.sticky.classList.add('scroll');
+                            }, 50);
+                            this.emit('sticky-out',{
+                                sticky: this.sticky,
+                                scrollTop: st,
+                                lastScrollTop: lastScrollTop
+                            });
+                        }
                     }
                     else{
                         if(!this.sticky.classList.contains('scroll--up')){
                             this.sticky.classList.add('scroll--up');
                             this.sticky.classList.remove('scroll--down');
-                            this.emit('sticky_in', {
+                            this.emit('sticky-in', {
                                 sticky: this.sticky,
                                 scrollTop: st,
                                 lastScrollTop: lastScrollTop
@@ -623,7 +636,7 @@ export default class Menu extends Emitter {
                 else{
                     this.sticky.classList.remove('sticky');
                 }
-                this.emit('sticky_out',{
+                this.emit('sticky-out',{
                     sticky: this.sticky,
                     scrollTop: st,
                     lastScrollTop: lastScrollTop
@@ -642,11 +655,11 @@ export default class Menu extends Emitter {
      */
     _handleSearch(){
         this.openSearch.forEach((el) => {
-           el.addEventListener('click', (e) => {
-               e.preventDefault();
-               this.lastOpenSearch = el;
-               this._openSearch();
-           });
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.lastOpenSearch = el;
+                this._openSearch();
+            });
         });
         this.closeSearch.forEach((el) => {
             el.addEventListener('click', (e) => {
@@ -760,15 +773,12 @@ export default class Menu extends Emitter {
 
     /**
      * *******************************************************
-     * Test device and mobile
+     * Test if device is touchable
      * *******************************************************
      */
-    _isMobileDevice(){
+    _isTouchable(){
         const isTouchable = !!('ontouchstart' in window);
-        if(window.innerWidth <= this.options.responsiveBreakpoint && isTouchable){
-            return true;
-        }
-        return false;
+        return isTouchable;
     }
 
     /**
