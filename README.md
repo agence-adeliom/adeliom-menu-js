@@ -155,6 +155,42 @@ En plus, est ajouté sur le sous-menu courant : "is-open", "is-opening", "is-lea
     }
 ```
 
+#Exemple CSS pour sous-menu
+```
+    .submenu{
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        width: 100%;
+        cursor: initial;
+        background-color: $white;
+        transition: all 250ms ease-in-out;
+        @include breakpoint-max(md) {
+            transform: translateX(-100%);
+        }
+        @include breakpoint(md) {
+            top: 100%;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+        }
+        @include breakpoint-max(md) {
+            height: 100%;
+            overflow: auto;
+        }
+        &.is-open{
+            @include breakpoint-max(md) {
+                transform: translate(0);
+            }
+            @include breakpoint(md) {
+                opacity: 1;
+                pointer-events: all;
+                visibility: visible;
+            }
+        }
+    }
+```
 # Listener
 ```
 menu.on('before_menu_open', (response) => {
