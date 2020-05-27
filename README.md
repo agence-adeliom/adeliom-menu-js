@@ -12,33 +12,52 @@ import Menu from 'adeliom-menu-js';
 
 ```
 const settings = {
+
     'menuSelector': '[js-menu]', => à appliquer sur les menus de type <ul>
-    'linkSelector': '[js-menu-link]', => à appliquer sur les liens de type <a>
-    'noLinkSelector': '[js-menu-nolink]', => à appliquer sur le <a> pour empêcher les événements (click etc.)
+    'equalizeHeightSelector': '[js-menu-equalizeheight]', => à appliquer sur 'menuSelector', pour avoir une hauteur de sous-menu basée sur la plus grande des hauteurs
+
     'parentSelector': '[js-menu-item]', => à appliquer au parent du lien, donc généralement sur le <li>
     'parentSubmenuSelector': '[js-menu-haschildren]', => à appliquer sur le même élément que 'parentSelector'
+
+    'linkSelector': '[js-menu-link]', => à appliquer sur les liens de type <a>
+    'noLinkSelector': '[js-menu-nolink]', => à appliquer sur le <a> pour empêcher les événements (click etc.)
+
     'submenuSelector': '[js-menu-sublevel]', => à appliquer sur un élément qui se trouve généralement dans le <li>
+
     'eventSelector': '[js-menu-event]', => type d'événement, par défaut : click, possible de surcharger avec mouseenter
+
     'closeSelector': '[js-menu-close]', => à appliquer sur les éléments pour fermer le menu, à appliquer sur l'overlay également
+
     'overlaySelector': '[js-menu-overlay]', => selecteur de l'overlay, pas de fermeture auto, appliquer le selecteur 'closeSelector'
+
     'backSelector': '[js-menu-back]', => à appliquer sur le lien de retour, dans les sous-menus
+
     'searchSelector': '[js-search]', => à appliquer sur l'élément de recherche, une modal par exemple
     'searchOpenSelector': '[js-search-open]', => à appliquer sur l'élément d'ouverture de la recherche
     'searchCloseSelector': '[js-search-close]', => à appliquer sur l'élément de fermeture de la recherche
+
     'menuBurgerSelector': '[js-menu-burger]', => à appliquer sur le menu burger pour l'ouverture du menu mobile
     'menuBurgerLabelSelector': '[js-menu-burger-label]', => à appliquer dans le cas où l'on a un label "Ouvrir" / "Fermer"
+
     'menuMobileSelector': '[js-menu-mobile]', => à appliquer sur l'élément principal qui doit s'ouvrir sur mobile
+
     'stickySelector': '[js-menu-sticky]', => à appliquer sur l'élément sticky, généralement le header
     'stickyMobileSelector': '[js-menu-sticky-mobile]', => à appliquer sur l'élément sticky mobile, qui peut être le même ou différent que sur Desktop
-    'equalizeHeightSelector': '[js-menu-equalizeheight]', => à appliquer sur 'menuSelector', pour avoir une hauteur de sous-menu basée sur la plus grande des hauteurs
-    'skipLinksSelector': '[js-menu-skip-links]', => à appliquer sur l'élément parent qui contient les liens "d'évitements" 
-    'stickyScrollTop': false, => gestion du sticky uniquement au scroll up
     'stickyOffset': 300, => apparition du sticky, à partir de X px
+    'stickyScrollTop': false, => gestion du sticky uniquement au scroll up
+
+    'skipLinksSelector': '[js-menu-skip-links]', => à appliquer sur l'élément parent qui contient les liens "d'évitements" 
+
     'closeMenuOnScroll': false, => fermeture du menu au scroll
+
     'selectByDataAttribute': false, => BETA : gestion des selecteurs avec des identifiants, pour structurer différement le menu
+
     'responsiveBreakpoint': 1280, => passage au menu mobile
+
     'accessibility': true, => gestion de l'accessibilité, navigation TAB + flèches etc.
+
     'openingTime': 250 => durée de transition pour l'ouverture / fermeture du menu et sous-menus
+
 };
 ```
 
@@ -102,6 +121,39 @@ menu.init();
 
 En plus, est ajouté sur le sous-menu courant : "is-open", "is-opening", "is-leaving" 
 
+# Exemple CSS pour sticky
+```
+    header{
+        &.sticky-up,
+        &.sticky {
+            position: fixed;
+            z-index: 110000;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        &.sticky{
+            animation: slideDown 0.3s ease-in-out;
+            @keyframes slideDown {
+                0% {
+                    transform: translateY(-100%);
+                }
+                100% {
+                    transform: translateY(0);
+                }
+            }
+        }
+        &.sticky-up{
+            transform: translateY(-100%);
+            &.scroll{
+                @include transition-default();
+            }
+            &.scroll--up{
+                transform: translateY(0);
+            }
+        }
+    }
+```
 
 # Listener
 ```
