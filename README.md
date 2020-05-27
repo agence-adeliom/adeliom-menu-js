@@ -155,7 +155,7 @@ En plus, est ajouté sur le sous-menu courant : "is-open", "is-opening", "is-lea
     }
 ```
 
-#Exemple CSS pour sous-menu
+# Exemple CSS pour sous-menu
 ```
     .submenu{
         position: absolute;
