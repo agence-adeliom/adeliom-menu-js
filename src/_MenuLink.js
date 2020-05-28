@@ -38,7 +38,7 @@ export default class MenuLink {
     initSubmenu(){
 
         const eventAttribute = this.link.getAttribute(this.domNode._getAttribute(this.domNode.options.eventSelector));
-        const eventType = this.domNode._isTouchable() ? 'click' : eventAttribute ? eventAttribute : 'click';
+        const eventType = this.domNode._isMobile() || this.domNode._isTouchable() ? 'click' : eventAttribute ? eventAttribute : 'click';
 
         const link = eventType === 'mouseenter' ? this.parentLink : this.link;
 

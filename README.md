@@ -8,7 +8,7 @@ yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
 import Menu from 'adeliom-menu-js';
 ```
 
-# Available options (by default)
+# Options disponibles (par défaut)
 
 ```
 const settings = {
@@ -61,15 +61,13 @@ const settings = {
 };
 ```
 
-# Init Class
-
+# Initialisation
 ```
 const menu = new Menu(settings);
 menu.init();
 ```
 
-# HTML
-
+# Exemples HTML
 ```
 <header js-menu-sticky js-menu-sticky-mobile> 
 
@@ -113,7 +111,7 @@ menu.init();
 # Class CSS
 - A l'ouverture du menu, la classe "menu-is-open" est ajoutée sur le body.
 - La classe "menu-is-opening" est également ajoutée le temps de l'ouverture.
-- Lorsque le menu se ferme la classe "menu-is-leaving" s'ajoute, puis est supprimée à son tour.
+- Lorsque le menu se ferme la classe "menu-is-closing" s'ajoute, puis est supprimée à son tour.
 
 => Le temps de l'ouverture / fermeture peut-être modifé via l'option : openingTime
 
@@ -176,7 +174,6 @@ En plus, est ajouté sur le sous-menu courant : "is-open", "is-opening", "is-lea
             visibility: hidden;
         }
         @include breakpoint-max(md) {
-            height: 100%;
             overflow: auto;
         }
         &.is-open{
@@ -191,7 +188,8 @@ En plus, est ajouté sur le sous-menu courant : "is-open", "is-opening", "is-lea
         }
     }
 ```
-# Listener
+
+# Événements
 ```
 menu.on('before_menu_open', (response) => {
     console.log(response);

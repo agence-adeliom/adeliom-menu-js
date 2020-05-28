@@ -119,7 +119,7 @@ export default class Menu extends Emitter {
         // close menu if we scroll on the page
         if(this.options.closeMenuOnScroll){
             document.addEventListener('scroll', () => {
-                if(this.body.classList.contains('menu-is-open') && !this._isMobile() && !this._isTouchable()){
+                if(this.currentSubmenu && !this.body.classList.contains('menu-is-opening') && !this._isMobile() && !this._isTouchable()){
                     this._closeMenu();
                 }
             });
@@ -130,7 +130,7 @@ export default class Menu extends Emitter {
             this.close.forEach((el) => {
                 el.addEventListener("click", (e) => {
                     e.preventDefault();
-                    this._closeMenu(true);
+                    this._closeMenu();
                 });
             });
         }
@@ -402,7 +402,7 @@ export default class Menu extends Emitter {
 
         this.currentSubmenu.classList.remove('is-active');
         this.currentSubmenu.classList.remove('is-open');
-        this.currentSubmenu.classList.add('is-leaving');
+        this.currentSubmenu.classList.add('is-closing');
 
         if(this.options.accessibility) {
             this.currentSubmenu.setAttribute("aria-expanded", false);
@@ -419,10 +419,10 @@ export default class Menu extends Emitter {
             this.currentSubmenu = parentSubmenu;
             this.currentSubmenu.classList.add('is-active');
         } else {
-            this.body.classList.add('submenu-is-leaving');
+            this.body.classList.add('submenu-is-closing');
             this._endAnimation(() => {
                 this.body.classList.remove('submenu-is-open');
-                this.body.classList.remove('submenu-is-leaving');
+                this.body.classList.remove('submenu-is-closing');
             });
         }
 
@@ -435,7 +435,7 @@ export default class Menu extends Emitter {
         });
 
         this._endAnimation(() => {
-            this.currentSubmenu.classList.remove('is-leaving');
+            this.currentSubmenu.classList.remove('is-closing');
             this.emit('after_previous_submenu', {
                 submenu: this.currentSubmenu
             });
@@ -475,7 +475,7 @@ export default class Menu extends Emitter {
         submenusOpen.forEach((el) => {
             el.classList.remove('is-active');
             el.classList.remove('is-open');
-            el.classList.add('is-leaving');
+            el.classList.add('is-closing');
             if(this.options.accessibility) {
                 el.setAttribute("aria-expanded", false);
                 el.setAttribute("aria-hidden", true);
@@ -501,8 +501,8 @@ export default class Menu extends Emitter {
             this.body.classList.remove('menu-is-open');
             this.body.classList.remove('submenu-is-open');
 
-            this.body.classList.add('menu-is-leaving');
-            this.body.classList.add('submenu-is-leaving');
+            this.body.classList.add('menu-is-closing');
+            this.body.classList.add('submenu-is-closing');
 
         }
         else{
@@ -511,11 +511,11 @@ export default class Menu extends Emitter {
 
         this._endAnimation(() => {
             submenusOpen.forEach((el) => {
-                el.classList.remove('is-leaving');
+                el.classList.remove('is-closing');
             });
-            this.body.classList.remove('submenu-is-leaving');
+            this.body.classList.remove('submenu-is-closing');
             if(!changeMenu){
-                this.body.classList.remove('menu-is-leaving');
+                this.body.classList.remove('menu-is-closing');
                 this.currentSubmenu = null;
                 this.emit('after_close_menu');
             }
