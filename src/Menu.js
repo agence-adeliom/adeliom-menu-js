@@ -680,21 +680,27 @@ export default class Menu extends Emitter {
                 e.stopPropagation();
             });
         });
-        this.search.addEventListener('keyup', (e) => {
-            if(e.keyCode == 27) {
-                this.lastOpenSearch.focus();
-                this._closeSearch();
-            }
-        });
-        this.searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this._submitSearch();
-        });
-        this.searchInput.addEventListener('input', (e) => {
-            if(e.target.value.trim().length){
-                this.searchInput.classList.remove('error');
-            }
-        });
+        if(this.search){
+            this.search.addEventListener('keyup', (e) => {
+                if(e.keyCode == 27) {
+                    this.lastOpenSearch.focus();
+                    this._closeSearch();
+                }
+            });
+        }
+        if(this.searchForm){
+            this.searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this._submitSearch();
+            });
+        }
+        if(this.searchInput){
+            this.searchInput.addEventListener('input', (e) => {
+                if(e.target.value.trim().length){
+                    this.searchInput.classList.remove('error');
+                }
+            });
+        }
     }
 
     /**
