@@ -158,7 +158,7 @@ export default class Menu extends Emitter {
             if(this.options.accessibility && !this._isMobile()){
                 // close submenu if it's last link
                 document.addEventListener('focusin', (e) => {
-                    if(this.currentSubmenu && !e.target.hasAttribute(this._getAttribute(this.options.linkSelector)) && !getClosest(e.target, this.options.submenuSelector)){
+                    if(this.currentSubmenu && this._matchElement(e.target, this.options.linkSelector) && !getClosest(e.target, this.options.submenuSelector)){
                         this._closeMenu();
                     }
                 });
@@ -246,7 +246,7 @@ export default class Menu extends Emitter {
                 const menuItem = new MenuItem(this, menu);
                 menuItem.init();
                 this.menusObj.push(menuItem);
-                if(menu.hasAttribute(this._getAttribute(this.options.equalizeHeightSelector))){
+                if(this._matchElement(menu, this.options.equalizeHeightSelector)){
                     this.submenusObj[index] = menuItem.submenus;
                 }
             });
@@ -803,6 +803,18 @@ export default class Menu extends Emitter {
      */
     _getAttribute(selector){
         return selector.replace('[', '').replace(']', '');
+    }
+
+    /**
+     * *******************************************************
+     * Test if element has class or attribute
+     * *******************************************************
+     */
+    _matchElement(element, selector){
+        if(element.hasAttribute(this._getAttribute(selector)) || element.classList.contains(selector)){
+            return true;
+        }
+        return false;
     }
 
     /**

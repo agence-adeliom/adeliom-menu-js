@@ -25,7 +25,7 @@ export default class MenuItem {
 
                 let submenu = null;
 
-                if(parentLink.hasAttribute(this.domNode._getAttribute(this.domNode.options.parentSubmenuSelector))) {
+                if(this.domNode._matchElement(parentLink, this.domNode.options.parentSubmenuSelector)) {
 
                     if(this.domNode.options.selectByDataAttribute){
                         const id = link.dataset.id;
