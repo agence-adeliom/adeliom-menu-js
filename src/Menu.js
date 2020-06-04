@@ -811,7 +811,7 @@ export default class Menu extends Emitter {
      * *******************************************************
      */
     _matchElement(element, selector){
-        if(element.hasAttribute(this._getAttribute(selector)) || element.classList.contains(selector)){
+        if(element.hasAttribute(this._getAttribute(selector)) || element.classList.contains(selector) || element.getAttribute('id') === selector){
             return true;
         }
         return false;
