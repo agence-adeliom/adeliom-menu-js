@@ -559,6 +559,9 @@ export default class Menu extends Emitter {
                 this.sticky.classList.remove('scroll');
                 this.sticky.classList.remove('scroll--up');
                 this.sticky.classList.remove('scroll--down');
+                this.body.classList.remove('header-is-sticky');
+                this.body.classList.remove('scroll--up');
+                this.body.classList.remove('scroll--down');
             }
             this.sticky = document.querySelector(this.options.stickyMobileSelector);
         }
@@ -586,6 +589,7 @@ export default class Menu extends Emitter {
             }
 
             if(st > this.sticky.clientHeight + this.options.stickyOffset){
+                this.body.classList.add('header-is-sticky');
                 if(!this.options.stickyScrollTop){
                     this.sticky.classList.add('sticky');
                     this.body.style.paddingTop = this.sticky.clientHeight + "px";
@@ -599,6 +603,8 @@ export default class Menu extends Emitter {
                     this.sticky.classList.add('sticky-up');
                     if (st > lastScrollTop) {
                         if(!this.sticky.classList.contains('scroll--down')){
+                            this.body.classList.add('scroll--down');
+                            this.body.classList.remove('scroll--up');
                             this.sticky.classList.add('scroll--down');
                             this.sticky.classList.remove('scroll--up');
                             this.body.style.paddingTop = this.sticky.clientHeight + "px";
@@ -614,6 +620,8 @@ export default class Menu extends Emitter {
                     }
                     else{
                         if(!this.sticky.classList.contains('scroll--up')){
+                            this.body.classList.add('scroll--up');
+                            this.body.classList.remove('scroll--down');
                             this.sticky.classList.add('scroll--up');
                             this.sticky.classList.remove('scroll--down');
                             this.emit('sticky-in', {
@@ -636,6 +644,7 @@ export default class Menu extends Emitter {
                 else{
                     this.sticky.classList.remove('sticky');
                 }
+                this.body.classList.remove('header-is-sticky');
                 this.emit('sticky-out',{
                     sticky: this.sticky,
                     scrollTop: st,
