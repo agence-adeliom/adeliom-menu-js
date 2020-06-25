@@ -1777,7 +1777,7 @@ dashdash@^1.12.0:
 
 "dauphine-js@https://bitbucket.org/adeliomgit/dauphine-js.git":
   version "0.1.0"
-  resolved "https://bitbucket.org/adeliomgit/dauphine-js.git#0c1aa3f2347d750d137c779e36cf7cde685100cf"
+  resolved "https://bitbucket.org/adeliomgit/dauphine-js.git#51aa865c66a12da188f2cb389702da7f49b0d634"
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"

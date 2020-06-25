@@ -1,6 +1,7 @@
 import MenuItem from "./_MenuItem";
 import {getHeighestElement, getClosest} from 'dauphine-js';
 import Emitter from 'dauphine-js/dist/emitter';
+import {foreach} from 'dauphine-js/dist/polyfill';
 
 export default class Menu extends Emitter {
 
@@ -108,6 +109,8 @@ export default class Menu extends Emitter {
      * *******************************************************
      */
     init() {
+
+        foreach();
 
         this._initMenu();
 
@@ -636,10 +639,11 @@ export default class Menu extends Emitter {
 
             if(st < 2){
                 this.body.style.paddingTop = 0;
-                if(this.options.stickyScrollTop && !this._isMobile()){
+                if(this.options.stickyScrollTop){
                     this.sticky.classList.remove('sticky-up');
                     this.sticky.classList.remove('scroll--up');
                     this.sticky.classList.remove('scroll');
+                    this.body.classList.remove('scroll--up');
                 }
                 else{
                     this.sticky.classList.remove('sticky');
