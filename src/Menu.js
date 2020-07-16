@@ -73,7 +73,7 @@ export default class Menu extends Emitter {
         this.openSearch = this.search && this.options.searchOpenSelector ? document.querySelectorAll(this.options.searchOpenSelector) : null;
         this.closeSearch = this.search && this.options.searchCloseSelector ? document.querySelectorAll(this.options.searchCloseSelector) : null;
         this.searchForm = this.search ? this.search.querySelector('form') : null;
-        this.searchInput = this.searchForm ? this.searchForm.querySelector('input[type=text]') : null;
+        this.searchInput = this.searchForm ? this.searchForm.querySelector('input:not([type=submit])') : null;
 
         this.skipLinks = this.options.skipLinksSelector ? document.querySelector(this.options.skipLinksSelector) : null;
 
