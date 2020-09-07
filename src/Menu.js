@@ -1,7 +1,6 @@
 import MenuItem from "./_MenuItem";
 import {getHeighestElement, getClosest} from 'dauphine-js';
 import Emitter from 'dauphine-js/dist/emitter';
-import {foreach} from 'dauphine-js/dist/polyfill';
 
 export default class Menu extends Emitter {
 
@@ -73,7 +72,7 @@ export default class Menu extends Emitter {
         this.openSearch = this.search && this.options.searchOpenSelector ? document.querySelectorAll(this.options.searchOpenSelector) : null;
         this.closeSearch = this.search && this.options.searchCloseSelector ? document.querySelectorAll(this.options.searchCloseSelector) : null;
         this.searchForm = this.search ? this.search.querySelector('form') : null;
-        this.searchInput = this.searchForm ? this.searchForm.querySelector('input:not([type=submit])') : null;
+        this.searchInput = this.searchForm ? this.searchForm.querySelector('input[type=text]') : null;
 
         this.skipLinks = this.options.skipLinksSelector ? document.querySelector(this.options.skipLinksSelector) : null;
 
@@ -109,8 +108,6 @@ export default class Menu extends Emitter {
      * *******************************************************
      */
     init() {
-
-        foreach();
 
         this._initMenu();
 
@@ -161,7 +158,7 @@ export default class Menu extends Emitter {
             if(this.options.accessibility && !this._isMobile()){
                 // close submenu if it's last link
                 document.addEventListener('focusin', (e) => {
-                    if(this.currentSubmenu && this._matchElement(e.target, this.options.linkSelector) && !getClosest(e.target, this.options.submenuSelector)){
+                    if(this.currentSubmenu && !e.target.hasAttribute(this._getAttribute(this.options.linkSelector)) && !getClosest(e.target, this.options.submenuSelector)){
                         this._closeMenu();
                     }
                 });
@@ -249,7 +246,7 @@ export default class Menu extends Emitter {
                 const menuItem = new MenuItem(this, menu);
                 menuItem.init();
                 this.menusObj.push(menuItem);
-                if(this._matchElement(menu, this.options.equalizeHeightSelector)){
+                if(menu.hasAttribute(this._getAttribute(this.options.equalizeHeightSelector))){
                     this.submenusObj[index] = menuItem.submenus;
                 }
             });
@@ -270,8 +267,6 @@ export default class Menu extends Emitter {
             this.firstLink = linkFirstLevel;
         }
 
-        this.currentSubmenu = el.submenu;
-
         if(!alreadyOpen){
             this.body.classList.add('menu-is-open');
             this.body.classList.add('menu-is-opening');
@@ -281,6 +276,8 @@ export default class Menu extends Emitter {
         else{
             this.body.classList.add('submenu-is-changing');
         }
+
+        this.currentSubmenu = el.submenu;
 
         this.currentSubmenu.classList.add('is-active');
         this.currentSubmenu.classList.add('is-open');
@@ -401,8 +398,6 @@ export default class Menu extends Emitter {
      */
     _previousSubmenu(parentSubmenu, link, setFocus=false){
 
-        const currentSubmenu = this.currentSubmenu;
-
         this.currentSubmenu.classList.remove('is-active');
         this.currentSubmenu.classList.remove('is-open');
         this.currentSubmenu.classList.add('is-closing');
@@ -421,8 +416,21 @@ export default class Menu extends Emitter {
         if(parentSubmenu){
             this.currentSubmenu = parentSubmenu;
             this.currentSubmenu.classList.add('is-active');
-        } else {
+
+            this.emit('before_previous_submenu', {
+                submenu: this.currentSubmenu
+            });
+
+            this._endAnimation(() => {
+                this.currentSubmenu.classList.remove('is-closing');
+                this.emit('after_previous_submenu', {
+                    submenu: this.currentSubmenu
+                });
+            });
+        }
+        else {
             this.body.classList.add('submenu-is-closing');
+            this.currentSubmenu = null;
             this._endAnimation(() => {
                 this.body.classList.remove('submenu-is-open');
                 this.body.classList.remove('submenu-is-closing');
@@ -432,17 +440,6 @@ export default class Menu extends Emitter {
         if(setFocus){
             link.focus();
         }
-
-        this.emit('before_previous_submenu', {
-            submenu: this.currentSubmenu
-        });
-
-        this._endAnimation(() => {
-            this.currentSubmenu.classList.remove('is-closing');
-            this.emit('after_previous_submenu', {
-                submenu: this.currentSubmenu
-            });
-        });
 
     }
 
@@ -509,7 +506,9 @@ export default class Menu extends Emitter {
 
         }
         else{
-            this.emit('before_change_menu');
+            this.emit('before_change_menu', {
+                submenu: this.currentSubmenu
+            });
         }
 
         this._endAnimation(() => {
@@ -523,7 +522,9 @@ export default class Menu extends Emitter {
                 this.emit('after_close_menu');
             }
             else{
-                this.emit('after_change_menu');
+                this.emit('after_change_menu', {
+                    submenu: this.currentSubmenu
+                });
             }
         });
 
@@ -684,27 +685,21 @@ export default class Menu extends Emitter {
                 e.stopPropagation();
             });
         });
-        if(this.search){
-            this.search.addEventListener('keyup', (e) => {
-                if(e.keyCode == 27) {
-                    this.lastOpenSearch.focus();
-                    this._closeSearch();
-                }
-            });
-        }
-        if(this.searchForm){
-            this.searchForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this._submitSearch();
-            });
-        }
-        if(this.searchInput){
-            this.searchInput.addEventListener('input', (e) => {
-                if(e.target.value.trim().length){
-                    this.searchInput.classList.remove('error');
-                }
-            });
-        }
+        this.search.addEventListener('keyup', (e) => {
+            if(e.keyCode == 27) {
+                this.lastOpenSearch.focus();
+                this._closeSearch();
+            }
+        });
+        this.searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this._submitSearch();
+        });
+        this.searchInput.addEventListener('input', (e) => {
+            if(e.target.value.trim().length){
+                this.searchInput.classList.remove('error');
+            }
+        });
     }
 
     /**
@@ -807,18 +802,6 @@ export default class Menu extends Emitter {
      */
     _getAttribute(selector){
         return selector.replace('[', '').replace(']', '');
-    }
-
-    /**
-     * *******************************************************
-     * Test if element has class or attribute
-     * *******************************************************
-     */
-    _matchElement(element, selector){
-        if(element.hasAttribute(this._getAttribute(selector)) || element.classList.contains(selector) || element.getAttribute('id') === selector){
-            return true;
-        }
-        return false;
     }
 
     /**
