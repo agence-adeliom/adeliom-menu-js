@@ -88,10 +88,10 @@ export default class MenuLink {
      */
     _onMouseLeave(e) {
         const relatedTarget = e.relatedTarget;
-        if(relatedTarget && (this.domNode._matchElement(relatedTarget, this.domNode.options.parentSelector) || this.domNode._matchElement(relatedTarget, this.domNode.options.linkSelector))){
-            this.domNode._changeMenu();
-        }
-        else{
+        const parentLinkAttribute = this.domNode._getAttribute(this.domNode.options.parentSelector);
+        const linkAttribute = this.domNode._getAttribute(this.domNode.options.linkSelector);
+
+        if(relatedTarget && (!relatedTarget.hasAttribute(parentLinkAttribute) && !relatedTarget.hasAttribute(linkAttribute))){
             this.domNode._closeMenu();
         }
     }
