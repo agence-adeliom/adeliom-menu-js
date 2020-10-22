@@ -148,6 +148,20 @@ export default class Menu extends Emitter {
 
         this._initSkipLinks();
 
+        // handle search
+        if(this.search && this.openSearch){
+            this._handleSearch();
+        }
+
+        if(this._isTouchable() && !this._isMobile()){
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                if(this.currentSubmenu && target !== this.currentSubmenu && !getClosest(target, this.options.submenuSelector)){
+                    this._closeMenu();
+                }
+            });
+        }
+
         // handle sticky with responsive callback
         this._handleResponsive(() => {
 
@@ -165,20 +179,6 @@ export default class Menu extends Emitter {
             }
 
         });
-
-        // handle search
-        if(this.search && this.openSearch){
-            this._handleSearch();
-        }
-
-        if(this._isTouchable() && !this._isMobile()){
-            document.addEventListener('click', (e) => {
-                const target = e.target;
-                if(this.currentSubmenu && target !== this.currentSubmenu && !getClosest(target, this.options.submenuSelector)){
-                    this._closeMenu();
-                }
-            });
-        }
 
         this.isInit = true;
 
@@ -810,19 +810,17 @@ export default class Menu extends Emitter {
      * *******************************************************
      */
     _handleResponsive(callback){
-        if(this.isInit){
-            callback();
-            let resizeTimer;
-            window.onresize = () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    if(this.originalBreakpoint !== this._isMobile()){
-                        callback();
-                        this.originalBreakpoint = this._isMobile();
-                    }
-                }, 200);
-            };
-        }
+        callback();
+        let resizeTimer;
+        window.onresize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if(this.originalBreakpoint !== this._isMobile()){
+                    callback();
+                    this.originalBreakpoint = this._isMobile();
+                }
+            }, 200);
+        };
     }
 
     /**
