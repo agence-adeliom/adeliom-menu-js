@@ -301,7 +301,9 @@ export default class Menu extends Emitter {
                 submenu: this.currentSubmenu
             });
             this._endAnimation( () => {
-                this.currentSubmenu.classList.remove('is-opening');
+                if(this.currentSubmenu){
+                    this.currentSubmenu.classList.remove('is-opening');
+                }
                 this.body.classList.remove('submenu-is-changing');
                 this.emit("after_open_submenu", {
                     link: el.link,
