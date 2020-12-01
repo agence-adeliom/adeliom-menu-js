@@ -156,13 +156,6 @@ export default class Menu extends Emitter {
             });
         }
 
-        // handle sticky with responsive callback
-        this._handleResponsive(() => {
-            this._closeMenu();
-            this._initSticky();
-            this._initMenu();
-        });
-
         if(this.options.accessibility && !this._isMobile()){
             // close submenu if it's last link
             document.addEventListener('focusin', (e) => {
@@ -172,6 +165,13 @@ export default class Menu extends Emitter {
             });
         }
 
+        // handle sticky with responsive callback
+        this._handleResponsive(() => {
+            this._closeMenu();
+            this._initSticky();
+            this._initMenu();
+        });
+        
     }
 
     /**
