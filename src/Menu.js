@@ -94,8 +94,6 @@ export default class Menu extends Emitter {
         this.tab = false;
         this.clicked = true;
 
-        this.isInit = false;
-
         this.lastOpenSearch = null;
 
         this.originalBreakpoint = this._isMobile();
@@ -108,8 +106,6 @@ export default class Menu extends Emitter {
      * *******************************************************
      */
     init() {
-
-        this._initMenu();
 
         // handle menu burger
         if(this.menuBurger && this.menuMobile){
@@ -144,8 +140,6 @@ export default class Menu extends Emitter {
             });
         }
 
-        this._initSticky();
-
         this._initSkipLinks();
 
         // handle search
@@ -179,8 +173,6 @@ export default class Menu extends Emitter {
             }
 
         });
-
-        this.isInit = true;
 
     }
 
