@@ -158,21 +158,19 @@ export default class Menu extends Emitter {
 
         // handle sticky with responsive callback
         this._handleResponsive(() => {
-
             this._closeMenu();
             this._initSticky();
             this._initMenu();
-
-            if(this.options.accessibility && !this._isMobile()){
-                // close submenu if it's last link
-                document.addEventListener('focusin', (e) => {
-                    if(this.currentSubmenu && !e.target.hasAttribute(this._getAttribute(this.options.linkSelector)) && !getClosest(e.target, this.options.submenuSelector)){
-                        this._closeMenu();
-                    }
-                });
-            }
-
         });
+
+        if(this.options.accessibility && !this._isMobile()){
+            // close submenu if it's last link
+            document.addEventListener('focusin', (e) => {
+                if(this.currentSubmenu && !e.target.hasAttribute(this._getAttribute(this.options.linkSelector)) && !getClosest(e.target, this.options.submenuSelector)){
+                    this._closeMenu();
+                }
+            });
+        }
 
     }
 
