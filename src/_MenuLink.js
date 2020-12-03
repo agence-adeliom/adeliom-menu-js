@@ -92,7 +92,12 @@ export default class MenuLink {
         const linkAttribute = this.domNode._getAttribute(this.domNode.options.linkSelector);
 
         if(relatedTarget && (!relatedTarget.hasAttribute(parentLinkAttribute) && !relatedTarget.hasAttribute(linkAttribute))){
-            this.domNode._closeMenu();
+            if(this.domNode.currentSubmenu && this._isFirstLevel()){
+                this.domNode._closeMenu();
+            }
+            else{
+                this.domNode._previousSubmenu(this._getParentSubmenu(), this.link);
+            }
         }
     }
 

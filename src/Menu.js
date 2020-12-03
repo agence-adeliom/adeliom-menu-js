@@ -171,7 +171,7 @@ export default class Menu extends Emitter {
             this._initSticky();
             this._initMenu();
         });
-        
+
     }
 
     /**
