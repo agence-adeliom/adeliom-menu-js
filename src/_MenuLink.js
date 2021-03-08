@@ -298,6 +298,7 @@ export default class MenuLink {
      */
     _getParentSubmenu(){
         this.parentSubmenu = this.parentSubmenu || getClosest(this.parentLink, this.domNode.options.submenuSelector);
+        return this.parentSubmenu;
     }
 
     /**
@@ -317,8 +318,7 @@ export default class MenuLink {
             return false;
         }
         else{
-            this._getParentSubmenu();
-            return this.parentSubmenu ? false : true;
+            return !this._getParentSubmenu();
         }
     }
 
@@ -328,8 +328,7 @@ export default class MenuLink {
      * *******************************************************
      */
     _isSecondLevel(){
-        this._getParentSubmenu();
-        this.oldParent = this.parentSubmenu ? this.oldParent || getClosest(this.parentSubmenu, this.domNode.options.submenuSelector) : false;
+        this.oldParent = this._getParentSubmenu() ? this.oldParent || getClosest(this._getParentSubmenu(), this.domNode.options.submenuSelector) : false;
         return this.oldParent ? true : false;
     }
 
