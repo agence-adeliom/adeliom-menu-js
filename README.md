@@ -1,6 +1,6 @@
 # Installation
 ```
-yarn add https://bitbucket.org/adeliomgit/adeliom-menu-js.git
+yarn add https://github.com/agence-adeliom/adeliom-menu-js
 ```
 
 # Import
