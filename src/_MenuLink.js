@@ -63,7 +63,7 @@ export default class MenuLink {
         e.stopPropagation();
 
         // if submenu is already open and same link is clicked
-        if(eventType === 'click' && this.link.classList.contains('is-active')){
+        if(eventType === 'click' && this.link.classList.contains('is-active') && this._isFirstLevel()){
             this.domNode._closeMenu();
             return;
         }

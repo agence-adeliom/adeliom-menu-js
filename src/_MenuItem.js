@@ -22,6 +22,7 @@ export default class MenuItem {
             children.forEach((parentLink) => {
 
                 const link = parentLink.querySelector(this.domNode.options.linkSelector);
+                const allLinks = parentLink.querySelectorAll(this.domNode.options.linkSelector);
 
                 let submenu = null;
 

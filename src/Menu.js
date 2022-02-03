@@ -1,5 +1,5 @@
 import MenuItem from "./_MenuItem";
-import {getHeighestElement, getClosest} from 'dauphine-js';
+import {getHeighestElement, getClosest, getClosestChildren} from 'dauphine-js';
 import Emitter from 'dauphine-js/dist/emitter';
 
 export default class Menu extends Emitter {
@@ -85,7 +85,10 @@ export default class Menu extends Emitter {
 
         this.prevLink = null;
         this.firstLink = null;
+
+        this.currentMainMenu = null;
         this.currentSubmenu = null;
+        this.currentLink = null;
 
         this.menuMobileOpen = false;
 
@@ -249,7 +252,7 @@ export default class Menu extends Emitter {
      * Open menu
      * *******************************************************
      */
-    _openMenu(el, linkFirstLevel=null){
+    _openMenu(el, linkFirstLevel=null, menu = null){
 
         const alreadyOpen = this.currentSubmenu;
 
@@ -265,9 +268,44 @@ export default class Menu extends Emitter {
         }
         else{
             this.body.classList.add('submenu-is-changing');
+            if (getClosest(this.currentLink, this.options.submenuSelector) === getClosest(el.link, this.options.submenuSelector)) {
+                this.currentLink.classList.remove('is-active');
+                alreadyOpen.classList.remove('is-open');
+                alreadyOpen.classList.remove('is-closing');
+            }
+            else {
+                if(!this.currentMainMenu) {
+                    this.currentMainMenu = el.menu;
+                }
+                else {
+
+                    const allSubmenus = this.currentMainMenu.querySelectorAll(this.options.submenuSelector);
+                    const allLinks = this.currentMainMenu.querySelectorAll(this.options.linkSelector);
+
+                    let hasSubmenu = false;
+                    allSubmenus.forEach((submenu) => {
+                        if(submenu === el.submenu) {
+                            hasSubmenu = true;
+                        }
+                    });
+
+                    if(!hasSubmenu) {
+                        allSubmenus.forEach((submenu) => {
+                            submenu.classList.remove('is-open');
+                            submenu.classList.remove('is-closing');
+                        });
+                        allLinks.forEach((link) => {
+                            link.classList.remove('is-active');
+                        });
+                        this.currentMainMenu = el.menu;
+                    }
+
+                }
+            }
         }
 
         this.currentSubmenu = el.submenu;
+        this.currentLink = el.link;
 
         this.currentSubmenu.classList.add('is-active');
         this.currentSubmenu.classList.add('is-open');
