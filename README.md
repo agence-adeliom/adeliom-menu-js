@@ -191,27 +191,27 @@ En plus, est ajouté sur le sous-menu courant : "is-open", "is-opening", "is-lea
 
 # Événements
 ```
-menu.on('before_menu_open', (response) => {
+menu.on('before_open_menu', (response) => {
     console.log(response);
 });
 
-menu.on('after_menu_open', (response) => {
+menu.on('after_open_menu', (response) => {
     console.log(response);
 });
 
-menu.on('before_menu_open_mobile', (response) => {
+menu.on('before_open_menu_mobile', (response) => {
     console.log(response);
 });
 
-menu.on('after_menu_open_mobile', (response) => {
+menu.on('after_open_menu_mobile', (response) => {
     console.log(response);
 });
 
-menu.on('before_submenu_open', (response) => {
+menu.on('before_open_submenu', (response) => {
     console.log(response);
 });
 
-menu.on('after_submenu_open', (response) => {
+menu.on('after_open_submenu', (response) => {
     console.log(response);
 });
 
