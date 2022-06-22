@@ -25,16 +25,6 @@ const webpackOption = {
                         presets: ["@babel/preset-env"]
                     }
                 }
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    "css-loader",
-                    "sass-loader"
-                ]
             }
         ]
     },
@@ -50,12 +40,7 @@ const webpackOption = {
             },
             extractComments: false
         })]
-    },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: `/[name].css`
-        }),
-    ]
+    }
 };
 
 module.exports = webpackOption;
